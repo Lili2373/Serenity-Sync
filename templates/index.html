@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Timer and Sound Search</title>
+    <!-- Add the favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Display user's first name only if available -->
+    {% if first_name %}
+    <div class="user-info">
+        <p>Welcome, {{ first_name }}!</p>
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <h1>Meditation Timer & Sound Search</h1>
+
+        <!-- Meditation Duration -->
+        <form>
+            <label for="time">Meditation Duration (minutes):</label>
+            <input type="number" id="time" name="time" min="1" max="60" required><br><br>
+        </form>
+
+        <!-- Search for Sounds -->
+        <form id="searchForm">
+            <label for="query">Search for sounds:</label>
+            <input type="text" id="query" name="query" placeholder="Search" value="">
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Select Sound Dropdown -->
+        <label for="sound">Select Sound</label>
+        <select id="sound" name="sound">
+            <!-- Options will be dynamically populated -->
+        </select><br><br>
+
+        <!-- Start Timer Button -->
+        <button type="button" id="startTimerBtn">Start Timer</button>
+
+        <!-- Pause/Resume Button (hidden initially) -->
+        <button type="button" id="pauseResumeBtn" style="display: none;">Pause</button>
+
+        <!-- Timer Display -->
+        <h2 id="countdown"></h2>
+
+        <!-- Audio Player -->
+        <audio id="audioPlayer" controls loop></audio>
+
+        <!-- Back to Instructions Button -->
+        <a href="/" class="button" id="backToInstructionsBtn">Back to Instructions</a>
+
+        <!-- Error and Loading Messages -->
+        <p id="loadingMessage" style="display: none;">Loading sounds...</p>
+        <p id="errorMessage" style="color: red; display: none;">Failed to load sounds. Please try again.</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+</body>
+
+</html>

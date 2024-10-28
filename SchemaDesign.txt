@@ -1,0 +1,99 @@
+1. Users Table
+user_id: Primary Key (PK)
+username: Unique username
+email: Unique email address
+password_hash: Hashed password for security
+created_at: Timestamp when the user signed up
+
+2. Sounds Table
+sound_id: Primary Key (PK)
+sound_name: Name of the sound from the Freesound API
+preview_url: URL to the sound preview
+duration: Duration of the sound
+created_at: Timestamp when the sound was added to the database
+Relationships: One sound can be referenced in many meditation_sessions.
+
+3. Meditation Sessions Table
+session_id: Primary Key (PK)
+user_id: Foreign Key (FK) references Users.user_id
+sound_id: Foreign Key (FK) references Sounds.sound_id
+duration: Meditation duration chosen by the user
+started_at: Timestamp when the session started
+ended_at: Timestamp when the session ended
+Relationships: A user can have many meditation_sessions, and each session can use one sound.
+
+4. User Favorites Table
+favorite_id: Primary Key (PK)
+user_id: Foreign Key (FK) references Users.user_id
+sound_id: Foreign Key (FK) references Sounds.sound_id
+Relationships: A user can have many favorite_sounds, and each sound can be favorited by many users.
+
+
+
+
+Users to Meditation Sessions:
+
+Users —< Meditation Sessions (One-to-many relationship)
+Users to User Favorites to Sounds:
+
+Users —< User Favorites >— Sounds (Many-to-many relationship with the intermediary table User Favorites)
+Sounds to Meditation Sessions:
+
+Sounds —< Meditation Sessions (One-to-many relationship)
+
+
+
+
+SQL Schema Design
+
+-- 1. Users Table
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,        -- Unique identifier for each user
+    username VARCHAR(50) UNIQUE NOT NULL,          -- Username (variable-length string)
+    email VARCHAR(100) UNIQUE NOT NULL,            -- Email (variable-length string)
+    password_hash VARCHAR(255) NOT NULL,           -- Hashed password for security
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp of account creation
+);
+
+-- 2. Sounds Table
+CREATE TABLE Sounds (
+    sound_id INT PRIMARY KEY AUTO_INCREMENT,       -- Unique identifier for each sound
+    sound_name VARCHAR(100) NOT NULL,              -- Name of the sound (variable-length string)
+    preview_url VARCHAR(255) NOT NULL,             -- URL for sound preview (variable-length string)
+    duration INT NOT NULL,                         -- Duration of the sound (in seconds)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when sound was added
+);
+
+-- 3. Meditation Sessions Table
+CREATE TABLE Meditation_Sessions (
+    session_id INT PRIMARY KEY AUTO_INCREMENT,     -- Unique identifier for each session
+    user_id INT,                                   -- Foreign key referencing the Users table
+    sound_id INT,                                  -- Foreign key referencing the Sounds table
+    duration INT NOT NULL,                         -- Duration of the meditation session (in seconds)
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- Start time of the session
+    ended_at TIMESTAMP,                            -- End time of the session
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE, -- Cascade delete to remove user sessions
+    FOREIGN KEY (sound_id) REFERENCES Sounds(sound_id) ON DELETE SET NULL -- Set sound to NULL if deleted
+);
+
+-- 4. User Favorites Table (Many-to-Many relationship between Users and Sounds)
+CREATE TABLE User_Favorites (
+    favorite_id INT PRIMARY KEY AUTO_INCREMENT,    -- Unique identifier for each favorite
+    user_id INT,                                   -- Foreign key referencing the Users table
+    sound_id INT,                                  -- Foreign key referencing the Sounds table
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- Timestamp when sound was added to favorites
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE, -- Delete favorites when the user is deleted
+    FOREIGN KEY (sound_id) REFERENCES Sounds(sound_id) ON DELETE CASCADE -- Delete favorite when sound is deleted
+);
+
+-- 5. Settings Table (User Preferences)
+CREATE TABLE Settings (
+    setting_id INT PRIMARY KEY AUTO_INCREMENT,     -- Unique identifier for each setting
+    user_id INT,                                   -- Foreign key referencing the Users table
+    default_duration INT NOT NULL,                 -- Default meditation duration in seconds
+    notification_enabled BOOLEAN DEFAULT TRUE,     -- Boolean to track if notifications are enabled
+    theme_preference VARCHAR(20) DEFAULT 'light',  -- User theme preference (light/dark mode)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,-- Timestamp when the settings were created
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE -- Cascade delete to remove settings for deleted users
+);
+

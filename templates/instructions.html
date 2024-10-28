@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation Timer and Sound Search</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+
+<body>
+    <element class="Instructions"></element>
+    <div class="container">
+
+        <h1>Welcome To SerenitySync</h1>
+
+        <!-- Links for Register and Login -->
+        <div>
+            <a href="{{ url_for('register') }}" class="button">Register</a>
+            <a href="{{ url_for('login') }}" class="button">Login</a>
+        </div>
+
+        <h2>Getting Started</h2>
+        <p>This app allows you to set a timer for your meditation sessions and select music from Freesound that matches
+            your preference during the duration of your session.</p>
+
+        <h2>Steps to Use the App</h2>
+        <ul>
+            <li><b>Set your Meditation Duration:</b> Enter the number of minutes you want to meditate in the input box
+                labeled <em>"Meditation Duration"</em>.</li>
+            <li><strong>Search for Sounds:</strong> Type a keyword related to the type of meditation music you want,
+                such as "relaxation", "nature sounds", or "ambient".</li>
+            <li><strong>Select a Sound:</strong> Once you search, the app will show you a list of music options that
+                match your selected duration. Select one from the dropdown list.</li>
+            <li><strong>Start the Timer:</strong> Press the <em>"Start Timer"</em> button to begin your meditation
+                session. The music will start playing, and the countdown will begin.</li>
+            <li><strong>End of Meditation:</strong> When the timer reaches zero, the music will stop, and your session
+                will be complete.</li>
+        </ul>
+
+        <h2>Tips for a Better Meditation Experience</h2>
+        <ul>
+            <li>Find a quiet, comfortable space where you can relax during your meditation session.</li>
+            <li>Close your eyes and focus on your breathing.</li>
+            <li>Try different types of sounds (nature sounds, music, etc.) to find what works best for you.</li>
+            <li>Start with shorter sessions and gradually increase the duration as you become more comfortable.</li>
+        </ul>
+
+        <!-- Button to navigate to the timer page -->
+        <a href="/timer" class="button" id="goToTimerBtn">Go to SerenitySync </a>
+    </div>
+</body>
+
+</html>
